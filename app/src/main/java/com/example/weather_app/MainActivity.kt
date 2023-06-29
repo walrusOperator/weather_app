@@ -31,7 +31,6 @@ import com.example.weather_app.ui.theme.Weather_appTheme
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +65,6 @@ fun TopBar() {
 
 @Composable
 fun ShowWeather() {
-    //Create column that will act as work space for the view
     Column() {
         Column(
             modifier = Modifier
@@ -80,7 +78,7 @@ fun ShowWeather() {
             )
             Spacer(modifier = Modifier.height(24.dp))
             Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier.padding(horizontal = 25.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
@@ -107,24 +105,24 @@ fun ShowWeather() {
                 modifier = Modifier
                     .size(size = 100.dp)
                 )
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-            val textStyle = TextStyle(
-                fontSize = 18.sp
-            )
-            Text(text = stringResource(id = R.string.low), style = textStyle)
-            Text(text = stringResource(id = R.string.high), style = textStyle)
-            Text(text = stringResource(id = R.string.humidity), style = textStyle)
-            Text(text = stringResource(id = R.string.pressure), style = textStyle)
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 25.dp)
+            ) {
+                val textStyle = TextStyle(
+                    fontSize = 18.sp
+                )
+                Text(text = stringResource(id = R.string.low), style = textStyle)
+                Text(text = stringResource(id = R.string.high), style = textStyle)
+                Text(text = stringResource(id = R.string.humidity), style = textStyle)
+                Text(text = stringResource(id = R.string.pressure), style = textStyle)
 
+            }
         }
     }
-}
 }
 
 
