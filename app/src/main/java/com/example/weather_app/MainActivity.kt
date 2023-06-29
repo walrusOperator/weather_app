@@ -75,7 +75,7 @@ fun ShowWeather() {
                 fontSize = 23.sp,
                 fontWeight = FontWeight(480)
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(2.dp))
             Row(
                 modifier = Modifier.padding(horizontal = 40.dp),
                 verticalAlignment = Alignment.CenterVertically
