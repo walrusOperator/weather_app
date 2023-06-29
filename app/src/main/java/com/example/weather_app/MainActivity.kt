@@ -62,7 +62,6 @@ fun TopBar() {
             colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue)
     )
 }
-
 @Composable
 fun ShowWeather() {
     Column() {
@@ -73,12 +72,12 @@ fun ShowWeather() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = stringResource(id = R.string.city),
-                fontSize = 20.sp,
-                fontWeight = FontWeight(600)
+                fontSize = 25.sp,
+                fontWeight = FontWeight(500)
             )
             Spacer(modifier = Modifier.height(24.dp))
             Row(
-                modifier = Modifier.padding(horizontal = 25.dp),
+                modifier = Modifier.padding(horizontal = 30.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
@@ -110,7 +109,7 @@ fun ShowWeather() {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 25.dp)
+                    .padding(horizontal = 30.dp)
             ) {
                 val textStyle = TextStyle(
                     fontSize = 18.sp
