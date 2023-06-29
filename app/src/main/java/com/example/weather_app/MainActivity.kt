@@ -77,7 +77,7 @@ fun ShowWeather() {
             )
             Spacer(modifier = Modifier.height(24.dp))
             Row(
-                modifier = Modifier.padding(horizontal = 30.dp),
+                modifier = Modifier.padding(horizontal = 40.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
