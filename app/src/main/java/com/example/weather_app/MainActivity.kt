@@ -72,8 +72,8 @@ fun ShowWeather() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = stringResource(id = R.string.city),
-                fontSize = 25.sp,
-                fontWeight = FontWeight(500)
+                fontSize = 23.sp,
+                fontWeight = FontWeight(480)
             )
             Spacer(modifier = Modifier.height(24.dp))
             Row(
