@@ -2,10 +2,6 @@ package com.example.weather_app
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,7 +15,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -29,18 +28,28 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun forecastItemList(dataItems: List<DayForecast>, navController : NavController) {
-
-    /* Create the list here. This function will call DataItemView() */
-    LazyColumn {
-        for(data in dataItems){
-            item{forecastItemView(data, navController = navController)}
+        /* Create the list here. This function will call DataItemView() */
+    TopAppBar(
+        title = {
+            Text(text = "Forecast", color = Color.White)},
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue)
+    )
+    Column {
+        Spacer(modifier = Modifier.padding(top = 60.dp))
+        LazyColumn {
+            for (data in dataItems) {
+                item { forecastItemView(data, navController = navController) }
+            }
         }
     }
-}
+    }
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun forecastItemView(dataItem: DayForecast, navController : NavController) {
     /* Create the view for the data item her. */
@@ -53,7 +62,7 @@ fun forecastItemView(dataItem: DayForecast, navController : NavController) {
         )
         Spacer(modifier = Modifier.weight(.25f, fill = true))
         Text(
-            text = dataItem.date.toString(),
+            text = dateConvert(dataItem.date),
             style = TextStyle(
                 fontSize = 20.sp,
             )
@@ -75,11 +84,11 @@ fun forecastItemView(dataItem: DayForecast, navController : NavController) {
                 horizontalAlignment = Alignment.End
             ) {
                 Text(
-                    text = "Sunrise: ${dataItem.sunrise}",
+                    text = "Sunrise: ${timeConvert(dataItem.sunrise)}",
                     fontSize = 16.sp
                 )
                 Text(
-                    text = "Sunset: ${dataItem.sunset}",
+                    text = "Sunset: ${timeConvert(dataItem.sunset)}",
                     fontSize = 16.sp
                 )
             }
@@ -89,8 +98,8 @@ fun forecastItemView(dataItem: DayForecast, navController : NavController) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun timeConvert(timeStamp : Long) : String {
-    val instant = Instant.ofEpochMilli(timeStamp)
-    val dateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC)
+    val tempTime = Instant.ofEpochMilli(timeStamp)
+    val dateTime = LocalDateTime.ofInstant(tempTime, ZoneOffset.UTC)
     val formatter = DateTimeFormatter.ofPattern("HH:mm a")
     return dateTime.format(formatter)
 }
@@ -98,8 +107,8 @@ fun timeConvert(timeStamp : Long) : String {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun dateConvert(date : Long) : String {
-    val instant = Instant.ofEpochSecond(date)
-    val dateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC)
+    val tempDate = Instant.ofEpochSecond(date)
+    val dateTime = LocalDateTime.ofInstant(tempDate, ZoneOffset.UTC)
     val formatter = DateTimeFormatter.ofPattern("MMM dd")
     return dateTime.format(formatter)
 }

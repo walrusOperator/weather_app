@@ -8,14 +8,11 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -26,37 +23,43 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weather_app.ui.theme.Weather_appTheme
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.weather_app.data.DayForecast
 import com.example.weather_app.data.ForecastTemp
-import com.example.weather_app.forecastItemList
-
-
 
 
 private val forecastItems = listOf(
-    DayForecast(31,8L, 21L, ForecastTemp(72F, 65F, 80F), 1023F, 100),
-    DayForecast(31-1,12L, 21L, ForecastTemp(72F, 65F, 80F), 1023F, 100)
+    DayForecast(1675152000,1675152000, 1675198800, ForecastTemp(72F, 65F, 80F), 1023F, 100),
+    DayForecast(1675238400,1675238400, 1675285200, ForecastTemp(65F, 65F, 80F), 1023F, 100),
+    DayForecast(1675324800,1675324800, 1675371600, ForecastTemp(45F, 65F, 80F), 1023F, 100),
+    DayForecast(1675411200,1675411200, 1675458000, ForecastTemp(76F, 65F, 80F), 1023F, 100),
+    DayForecast(1675497600,1675497600, 1675544400, ForecastTemp(77F, 65F, 80F), 1023F, 100),
+    DayForecast(1675584000,1675584000, 1675544400, ForecastTemp(66F, 65F, 80F), 1023F, 100),
+    DayForecast(1675670400,1675670400, 1675717200, ForecastTemp(54F, 65F, 80F), 1023F, 100),
+    DayForecast(1675756800,1675756800, 1675803600, ForecastTemp(54F, 65F, 80F), 1023F, 100),
+    DayForecast(1675843200,1675843200, 1675890000, ForecastTemp(80F, 65F, 80F), 1023F, 100),
+    DayForecast(1675929600,1675929600, 1675976400, ForecastTemp(72F, 65F, 80F), 1023F, 100),
+    DayForecast(1676016000,1676016000, 1676062800, ForecastTemp(75F, 65F, 80F), 1023F, 100),
+    DayForecast(1676102400,1676102400, 1676149200, ForecastTemp(32F, 65F, 80F), 1023F, 100),
+    DayForecast(1676188800,1676188800, 1676235600, ForecastTemp(85F, 65F, 80F), 1023F, 100),
+    DayForecast(1676275200,1676275200, 1676322000, ForecastTemp(72F, 65F, 80F), 1023F, 100),
+    DayForecast(1676361600,1676361600, 1676408400, ForecastTemp(72F, 65F, 80F), 1023F, 100),
+    DayForecast(1676448000,1676448000, 1676494800, ForecastTemp(72F, 65F, 80F), 1023F, 100),
 )
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -76,6 +79,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyCurrentWeather(navController : NavController) {
     TopBar()
@@ -167,54 +171,4 @@ fun ShowWeather(navController : NavController) {
     }
 }
 
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-            text = "Hello $name!",
-            modifier = modifier
-    )
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Weather_appTheme {
-        Greeting("Android")
-    }
-}
-
-//@Composable
-//fun ForecastItemList(dataItems: List<DayForecast>, navController : NavController) {
-//    /* Create the list here. This function will call DataItemView() */
-//    LazyColumn {
-//        for(data in dataItems){
-//            item{ForecastItemView(data, navController = navController)}
-//        }
-//    }
-//}
-//
-//@Composable
-//fun ForecastItemView(dataItem: DayForecast, navController : NavController) {
-//    /* Create the view for the data item her. */
-////    Row (
-////        Modifier.padding(bottom = 8.dp)
-////            .clickable(onClick = {
-////                navController.navigate(route = buildString {
-////                    append("DetailsScreen/")
-////                    append(dataItem.id)
-////                })
-////            })){
-////        Text(text = dataItem.id.toString())
-////        Spacer(modifier = Modifier.size(8.dp))
-////
-////        Column {
-////            Text(text = dataItem.name, style = TextStyle(fontWeight = FontWeight.Bold))
-////            Text(text = dataItem.description, style = TextStyle(fontSize = 12.sp))
-////        }
-////    }
-//
-//}
 
