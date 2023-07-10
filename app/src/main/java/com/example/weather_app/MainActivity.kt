@@ -1,8 +1,10 @@
 package com.example.weather_app
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,26 +31,56 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weather_app.ui.theme.Weather_appTheme
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.weather_app.data.DayForecast
+import com.example.weather_app.data.ForecastTemp
+import com.example.weather_app.forecastItemList
+
+
+
+
+private val forecastItems = listOf(
+    DayForecast(31,8L, 21L, ForecastTemp(72F, 65F, 80F), 1023F, 100),
+    DayForecast(31-1,12L, 21L, ForecastTemp(72F, 65F, 80F), 1023F, 100)
+)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Weather_appTheme {
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    MyCurrentWeather()
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "Start") {
+                    composable(route = "Start") {
+                        MyCurrentWeather(navController)
+                    }
+                    composable("ForecastScreen") {
+                        forecastItemList(dataItems = forecastItems, navController = navController)
+
+                    }
+                    }
                 }
-            }
         }
     }
 }
 
 @Composable
-fun MyCurrentWeather() {
+fun MyCurrentWeather(navController : NavController) {
+    TopBar()
     Column{
-        TopBar()
-        ShowWeather()
+        ShowWeather(navController = navController)
     }
 }
 
@@ -61,8 +93,10 @@ fun TopBar() {
             colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue)
     )
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ShowWeather() {
+fun ShowWeather(navController : NavController) {
+    Spacer(modifier = Modifier.height(60.dp))
     Column() {
         Column(
             modifier = Modifier
@@ -119,6 +153,16 @@ fun ShowWeather() {
                 Text(text = stringResource(id = R.string.pressure), style = textStyle)
 
             }
+            
+            Spacer(modifier = Modifier.height(65.dp))
+            Button(onClick = {navController.navigate("ForecastScreen")},
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(Color.Blue))
+            {
+                Text(text = "Forecast",
+                fontSize = 18.sp,
+                color = Color.White)
+            }
         }
     }
 }
@@ -141,3 +185,36 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+
+//@Composable
+//fun ForecastItemList(dataItems: List<DayForecast>, navController : NavController) {
+//    /* Create the list here. This function will call DataItemView() */
+//    LazyColumn {
+//        for(data in dataItems){
+//            item{ForecastItemView(data, navController = navController)}
+//        }
+//    }
+//}
+//
+//@Composable
+//fun ForecastItemView(dataItem: DayForecast, navController : NavController) {
+//    /* Create the view for the data item her. */
+////    Row (
+////        Modifier.padding(bottom = 8.dp)
+////            .clickable(onClick = {
+////                navController.navigate(route = buildString {
+////                    append("DetailsScreen/")
+////                    append(dataItem.id)
+////                })
+////            })){
+////        Text(text = dataItem.id.toString())
+////        Spacer(modifier = Modifier.size(8.dp))
+////
+////        Column {
+////            Text(text = dataItem.name, style = TextStyle(fontWeight = FontWeight.Bold))
+////            Text(text = dataItem.description, style = TextStyle(fontSize = 12.sp))
+////        }
+////    }
+//
+//}
+
