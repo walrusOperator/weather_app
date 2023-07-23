@@ -1,4 +1,4 @@
-package com.example.weather_app
+package com.example.weather_app.views
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -38,8 +37,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.jhf_weather.R
-import com.example.weather_app.models.CurrentConditions
-import com.example.weather_app.models.Forecast
 import com.example.weather_app.viewModels.CurrentConditionsViewModel
 
 //private val forecastItems = listOf(
@@ -102,7 +99,9 @@ fun TopBar() {
 @Composable
 fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewModel = hiltViewModel()) {
     val currentConditions = viewModel.currentConditions.observeAsState()
-
+    LaunchedEffect(Unit) {
+        viewModel.viewAppeared()
+    }
     Spacer(modifier = Modifier.height(60.dp))
     Column() {
         Column(
