@@ -1,4 +1,4 @@
-package com.example.weather_app.viewModel
+package com.example.weather_app
 
 import androidx.lifecycle.ViewModel
 import com.example.weather_app.OpenWeatherMapApi

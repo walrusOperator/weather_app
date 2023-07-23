@@ -36,6 +36,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.weather_app.data.CurrentConditions
 import com.example.weather_app.data.Forecast
+import com.example.weather_app.R
 
 private val forecastItems = listOf(
     CurrentConditions(1675152000,1675152000, 1675198800, Forecast(72F, 65F, 80F), 1023F, 100),
