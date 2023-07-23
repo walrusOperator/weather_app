@@ -23,91 +23,91 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.weather_app.data.CurrentConditions
+import com.example.weather_app.models.CurrentConditions
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun forecastItemList(dataItems: List<CurrentConditions>, navController : NavController) {
-    TopAppBar(
-        title = {
-            Text(text = "Forecast", color = Color.White)},
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue)
-    )
-    Column {
-        Spacer(modifier = Modifier.padding(top = 60.dp))
-        LazyColumn {
-            for (data in dataItems) {
-                item { forecastItemView(data, navController = navController) }
-            }
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun forecastItemView(dataItem: CurrentConditions, navController : NavController) {
-    /* Create the view for the data item her. */
-    Row(
-        verticalAlignment = Alignment.CenterVertically) {
-        Image(
-            painter = painterResource(id = R.drawable.sun),
-            contentDescription = "Sunny Weather Image",
-            modifier = Modifier.size(50.dp)
-        )
-        Spacer(modifier = Modifier.weight(.25f, fill = true))
-        Text(
-            text = dateConvert(dataItem.date),
-            style = TextStyle(
-                fontSize = 20.sp,
-            )
-        )
-        Spacer(modifier = Modifier.weight(1f, fill = true))
-        Column {
-            Text(
-                text = "Temp: ${dataItem.temp.day}º",
-                fontSize = 16.sp
-            )
-            Text(
-                text = "High: ${dataItem.temp.max}º",
-                fontSize = 16.sp
-            )
-        }
-        Spacer(modifier = Modifier.weight(1f, fill = true))
-        Column(
-            modifier = Modifier.padding(10.dp),
-            horizontalAlignment = Alignment.End
-        ) {
-            Text(
-                text = "Sunrise: ${timeConvert(dataItem.sunrise)}",
-                fontSize = 16.sp
-            )
-            Text(
-                text = "Sunset: ${timeConvert(dataItem.sunset)}",
-                fontSize = 16.sp
-            )
-        }
-    }
-}
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun timeConvert(timeStamp : Long) : String {
-    val tempTime = Instant.ofEpochMilli(timeStamp)
-    val dateTime = LocalDateTime.ofInstant(tempTime, ZoneOffset.UTC)
-    val formatter = DateTimeFormatter.ofPattern("HH:mm a")
-    return dateTime.format(formatter)
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun dateConvert(date : Long) : String {
-    val tempDate = Instant.ofEpochSecond(date)
-    val dateTime = LocalDateTime.ofInstant(tempDate, ZoneOffset.UTC)
-    val formatter = DateTimeFormatter.ofPattern("MMM dd")
-    return dateTime.format(formatter)
-}
+//@RequiresApi(Build.VERSION_CODES.O)
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun forecastItemList() {
+//    TopAppBar(
+//        title = {
+//            Text(text = "Forecast", color = Color.White)},
+//        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue)
+//    )
+//    Column {
+//        Spacer(modifier = Modifier.padding(top = 60.dp))
+//        LazyColumn {
+//            for (data in dataItems) {
+//                item { forecastItemView(data, navController = navController) }
+//            }
+//        }
+//    }
+//}
+//
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Composable
+//fun forecastItemView(dataItem: CurrentConditions, navController : NavController) {
+//    /* Create the view for the data item her. */
+//    Row(
+//        verticalAlignment = Alignment.CenterVertically) {
+//        Image(
+//            painter = painterResource(id = R.drawable.sun),
+//            contentDescription = "Sunny Weather Image",
+//            modifier = Modifier.size(50.dp)
+//        )
+//        Spacer(modifier = Modifier.weight(.25f, fill = true))
+//        Text(
+//            text = dateConvert(dataItem.date),
+//            style = TextStyle(
+//                fontSize = 20.sp,
+//            )
+//        )
+//        Spacer(modifier = Modifier.weight(1f, fill = true))
+//        Column {
+//            Text(
+//                text = "Temp: ${dataItem.temp.day}º",
+//                fontSize = 16.sp
+//            )
+//            Text(
+//                text = "High: ${dataItem.temp.max}º",
+//                fontSize = 16.sp
+//            )
+//        }
+//        Spacer(modifier = Modifier.weight(1f, fill = true))
+//        Column(
+//            modifier = Modifier.padding(10.dp),
+//            horizontalAlignment = Alignment.End
+//        ) {
+//            Text(
+//                text = "Sunrise: ${timeConvert(dataItem.sunrise)}",
+//                fontSize = 16.sp
+//            )
+//            Text(
+//                text = "Sunset: ${timeConvert(dataItem.sunset)}",
+//                fontSize = 16.sp
+//            )
+//        }
+//    }
+//}
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Composable
+//fun timeConvert(timeStamp : Long) : String {
+//    val tempTime = Instant.ofEpochMilli(timeStamp)
+//    val dateTime = LocalDateTime.ofInstant(tempTime, ZoneOffset.UTC)
+//    val formatter = DateTimeFormatter.ofPattern("HH:mm a")
+//    return dateTime.format(formatter)
+//}
+//
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Composable
+//fun dateConvert(date : Long) : String {
+//    val tempDate = Instant.ofEpochSecond(date)
+//    val dateTime = LocalDateTime.ofInstant(tempDate, ZoneOffset.UTC)
+//    val formatter = DateTimeFormatter.ofPattern("MMM dd")
+//    return dateTime.format(formatter)
+//}
 
