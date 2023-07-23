@@ -12,7 +12,7 @@ data class DayForecast(
     val sunrise: Long,
     val sunset: Long,
     @Json(name = "temp") private val tempData: ForecastTemp,
-    @Json(name = "weather") private val weatherSummaryList: List<WeatherSummary>,
+    @Json(name = "weather") private val weatherSummaryList: List<WeatherData>,
 ) {
     val daytimeTemp : Float
         get() = tempData.day
@@ -20,8 +20,6 @@ data class DayForecast(
         get() = tempData.min
     val maxTemp : Float
         get() = tempData.max
-    val weatherIconUrl : String
-        get() = "https://openweathermap.org/img/wn/${weatherSummaryList.firstOrNull()?.icon}@2x.png"
 }
 
 data class ForecastTemp(

@@ -9,9 +9,9 @@ interface ApiService {
     @GET("weather")
 
     suspend fun getCurrentConditions(
-        @Query(value = "zip") zip: String = "55119,us",
+        @Query(value = "zip") zip: String = "55426,us",
         @Query(value = "units") units: String = "imperial",
-        @Query(value = "appid") appid: String = "2ba6a68c2752676b1f6a031bb637be59"
+        @Query(value = "appid") appid: String = "9d64bb2a651b234eef2d08492ac7478a"
     ) : CurrentConditions
 
     @GET("forecast/daily")
@@ -19,7 +19,7 @@ interface ApiService {
         @Query(value = "zip") zip: String = "55119,us",
         @Query(value = "units") units: String = "imperial",
         @Query(value = "cnt") count: Int = 16,
-        @Query(value = "appid") appID: String = "2ba6a68c2752676b1f6a031bb637be59"
+        @Query(value = "appid") appID: String = "9d64bb2a651b234eef2d08492ac7478a"
     ) : Forecast
 
 }

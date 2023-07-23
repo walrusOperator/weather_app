@@ -28,6 +28,7 @@ import com.example.weather_app.ui.theme.Weather_appTheme
 import androidx.compose.foundation.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
@@ -101,6 +102,7 @@ fun TopBar() {
 @Composable
 fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewModel = hiltViewModel()) {
     val currentConditions = viewModel.currentConditions.observeAsState()
+
     Spacer(modifier = Modifier.height(60.dp))
     Column() {
         Column(
@@ -109,7 +111,7 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(id = R.string.city),
+            Text(text = "${currentConditions.value?.cityName}",
                 fontSize = 22.sp,
                 fontWeight = FontWeight(500)
             )
@@ -122,14 +124,14 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(id = R.string.temp),
+                        text = "${currentConditions.value?.conditions?.temp?.toInt()}°",
                         style = TextStyle(
                             fontWeight = FontWeight(400),
                             fontSize = 72.sp
                         )
                     )
                     Text(
-                        text = stringResource(id = R.string.feels_like),
+                        text = "Feels like ${currentConditions.value?.conditions?.feelsLike?.toInt()}°",
                         style = TextStyle(
                             fontSize = 14.sp
                         )
@@ -152,10 +154,10 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                 val textStyle = TextStyle(
                     fontSize = 18.sp
                 )
-                Text(text = stringResource(id = R.string.low), style = textStyle)
-                Text(text = stringResource(id = R.string.high), style = textStyle)
-                Text(text = stringResource(id = R.string.humidity), style = textStyle)
-                Text(text = stringResource(id = R.string.pressure), style = textStyle)
+                Text(text = "Low ${currentConditions.value?.conditions?.tempMin?.toInt()}°", style = textStyle)
+                Text(text = "High ${currentConditions.value?.conditions?.tempMax?.toInt()}°", style = textStyle)
+                Text(text = "Humidity ${currentConditions.value?.conditions?.humidity}%", style = textStyle)
+                Text(text = "Pressure ${currentConditions.value?.conditions?.pressure} hPa", style = textStyle)
             }
             Spacer(modifier = Modifier.height(65.dp))
             Button(onClick = {navController.navigate("ForecastScreen")},
