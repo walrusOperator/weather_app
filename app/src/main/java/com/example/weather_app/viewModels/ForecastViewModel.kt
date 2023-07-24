@@ -14,11 +14,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ForecastViewModel @Inject constructor(private val apiService: ApiService): ViewModel() {
-    private val _multiForecast: MutableLiveData<Forecast> = MutableLiveData()
-    val multiForecast: LiveData<Forecast>
-        get() = _multiForecast
+    private val _forecast: MutableLiveData<Forecast> = MutableLiveData()
+    val forecast: LiveData<Forecast>
+        get() = _forecast
 
     fun viewAppeared() = viewModelScope.launch {
-        _multiForecast.value = apiService.getForecast()
+        _forecast.value = apiService.getForecast()
     }
 }
