@@ -100,7 +100,7 @@ fun TopBar() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewModel = hiltViewModel()) {
-    val currentConditions = viewModel.currentConditions.observeAsState()
+    val weatherData = viewModel.currentConditions.observeAsState()
 //    LaunchedEffect(Unit) {
 //        viewModel.viewAppeared()
 //    }
@@ -112,7 +112,7 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "${currentConditions.value?.cityName}",
+            Text(text = "${weatherData.value?.cityName}",
                 fontSize = 22.sp,
                 fontWeight = FontWeight(500)
             )
@@ -125,14 +125,14 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "${currentConditions.value?.conditions?.temp?.toInt()}°",
+                        text = "${weatherData.value?.conditions?.temp?.toInt()}°",
                         style = TextStyle(
                             fontWeight = FontWeight(400),
                             fontSize = 72.sp
                         )
                     )
                     Text(
-                        text = "Feels like ${currentConditions.value?.conditions?.feelsLike?.toInt()}°",
+                        text = "Feels like ${weatherData.value?.conditions?.feelsLike?.toInt()}°",
                         style = TextStyle(
                             fontSize = 14.sp
                         )
@@ -155,10 +155,10 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                 val textStyle = TextStyle(
                     fontSize = 18.sp
                 )
-                Text(text = "Low ${currentConditions.value?.conditions?.tempMin?.toInt()}°", style = textStyle)
-                Text(text = "High ${currentConditions.value?.conditions?.tempMax?.toInt()}°", style = textStyle)
-                Text(text = "Humidity ${currentConditions.value?.conditions?.humidity}%", style = textStyle)
-                Text(text = "Pressure ${currentConditions.value?.conditions?.pressure} hPa", style = textStyle)
+                Text(text = "Low ${weatherData.value?.conditions?.tempMin?.toInt()}°", style = textStyle)
+                Text(text = "High ${weatherData.value?.conditions?.tempMax?.toInt()}°", style = textStyle)
+                Text(text = "Humidity ${weatherData.value?.conditions?.humidity}%", style = textStyle)
+                Text(text = "Pressure ${weatherData.value?.conditions?.pressure} hPa", style = textStyle)
             }
             Spacer(modifier = Modifier.height(65.dp))
             Button(onClick = {navController.navigate("ForecastScreen")},
