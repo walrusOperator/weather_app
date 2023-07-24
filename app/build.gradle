@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.jhf_weather'
+    namespace 'com.example.weather_app'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.jhf_weather"
+        applicationId "com.example.weather_app"
         minSdk 26
         targetSdk 33
         versionCode 1
