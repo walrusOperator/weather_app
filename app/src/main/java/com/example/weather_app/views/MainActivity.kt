@@ -36,7 +36,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.jhf_weather.R
+import com.example.weather_app.R
 import com.example.weather_app.viewModels.CurrentConditionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
