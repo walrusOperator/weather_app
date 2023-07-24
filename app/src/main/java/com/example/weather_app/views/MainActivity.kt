@@ -101,9 +101,9 @@ fun TopBar() {
 @Composable
 fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewModel = hiltViewModel()) {
     val currentConditions = viewModel.currentConditions.observeAsState()
-    LaunchedEffect(Unit) {
-        viewModel.viewAppeared()
-    }
+//    LaunchedEffect(Unit) {
+//        viewModel.viewAppeared()
+//    }
     Spacer(modifier = Modifier.height(60.dp))
     Column() {
         Column(
