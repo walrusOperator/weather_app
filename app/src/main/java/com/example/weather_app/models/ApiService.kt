@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("data/2.5/weather")
+    @GET("/data/2.5/weather")
     suspend fun getCurrentConditions(
         @Query(value = "zip") zip: String = "55426,us",
         @Query(value = "units") units: String = "imperial",

@@ -17,13 +17,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.weather_app.R
 import com.example.weather_app.models.CurrentConditions
+import com.example.weather_app.models.Forecast
+import com.example.weather_app.viewModels.ForecastViewModel
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -32,7 +37,11 @@ import java.time.format.DateTimeFormatter
 //@RequiresApi(Build.VERSION_CODES.O)
 //@OptIn(ExperimentalMaterial3Api::class)
 //@Composable
-//fun forecastItemList() {
+//fun forecastItemList(viewModel: ForecastViewModel) {
+//    val forecastWeather = viewModel.forecast.observeAsState()
+//    LaunchedEffect(Unit) {
+//        viewModel.viewAppeared()
+//    }
 //    TopAppBar(
 //        title = {
 //            Text(text = "Forecast", color = Color.White)},
@@ -40,8 +49,9 @@ import java.time.format.DateTimeFormatter
 //    )
 //    Column {
 //        Spacer(modifier = Modifier.padding(top = 60.dp))
+//        items()
 //        LazyColumn {
-//            for (data in dataItems) {
+//            for (data in forecast) {
 //                item { forecastItemView(data, navController = navController) }
 //            }
 //        }
