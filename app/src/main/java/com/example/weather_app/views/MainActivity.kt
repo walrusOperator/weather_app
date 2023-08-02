@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.weather_app.R
 import com.example.weather_app.viewModels.CurrentConditionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -122,9 +123,8 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                     )
                 }
                 Spacer(modifier = Modifier.weight(1f, fill = true))
-                Image(
-                    painter = painterResource(id = R.drawable.sun),
-                    contentDescription = "Clear sun",
+                AsyncImage(model = "https://openweathermap.org/img/wn/${weatherData.value?.weatherData?.get(0)?.iconName}@2x.png",
+                    contentDescription = "${weatherData.value?.weatherData?.get(0)?.description}@2x.png",
                     modifier = Modifier
                         .size(size = 100.dp)
                 )
