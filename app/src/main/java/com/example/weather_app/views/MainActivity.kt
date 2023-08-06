@@ -1,4 +1,4 @@
-package com.example.weather_app
+package com.example.weather_app.views
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,34 +27,21 @@ import com.example.weather_app.ui.theme.Weather_appTheme
 import androidx.compose.foundation.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.weather_app.data.CurrentConditions
-import com.example.weather_app.data.Forecast
+import coil.compose.AsyncImage
+import com.example.weather_app.R
+import com.example.weather_app.viewModels.CurrentConditionsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-private val forecastItems = listOf(
-    CurrentConditions(1675152000,1675152000, 1675198800, Forecast(72F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1675238400,1675238400, 1675285200, Forecast(65F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1675324800,1675324800, 1675371600, Forecast(45F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1675411200,1675411200, 1675458000, Forecast(76F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1675497600,1675497600, 1675544400, Forecast(77F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1675584000,1675584000, 1675544400, Forecast(66F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1675670400,1675670400, 1675717200, Forecast(54F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1675756800,1675756800, 1675803600, Forecast(54F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1675843200,1675843200, 1675890000, Forecast(80F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1675929600,1675929600, 1675976400, Forecast(72F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1676016000,1676016000, 1676062800, Forecast(75F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1676102400,1676102400, 1676149200, Forecast(32F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1676188800,1676188800, 1676235600, Forecast(85F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1676275200,1676275200, 1676322000, Forecast(72F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1676361600,1676361600, 1676408400, Forecast(72F, 65F, 80F), 1023F, 100),
-    CurrentConditions(1676448000,1676448000, 1676494800, Forecast(72F, 65F, 80F), 1023F, 100),
-)
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +54,7 @@ class MainActivity : ComponentActivity() {
                         MyCurrentWeather(navController)
                     }
                     composable("ForecastScreen") {
-                        forecastItemList(dataItems = forecastItems, navController = navController)
+                        forecastItemList()
                     }
                 }
             }
@@ -95,16 +81,22 @@ fun TopBar() {
 }
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ShowWeather(navController : NavController) {
+fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewModel = hiltViewModel()) {
+    val weatherData = viewModel.currentConditions.observeAsState()
+    LaunchedEffect(Unit) {
+        viewModel.viewAppeared()
+    }
     Spacer(modifier = Modifier.height(60.dp))
     Column() {
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(id = R.string.city),
+            Text(
+                text = "${weatherData.value?.cityName}",
                 fontSize = 22.sp,
                 fontWeight = FontWeight(500)
             )
@@ -117,23 +109,22 @@ fun ShowWeather(navController : NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(id = R.string.temp),
+                        text = "${weatherData.value?.conditions?.temp?.toInt()}°",
                         style = TextStyle(
                             fontWeight = FontWeight(400),
                             fontSize = 72.sp
                         )
                     )
                     Text(
-                        text = stringResource(id = R.string.feels_like),
+                        text = "Feels like ${weatherData.value?.conditions?.feelsLike?.toInt()}°",
                         style = TextStyle(
                             fontSize = 14.sp
                         )
                     )
                 }
                 Spacer(modifier = Modifier.weight(1f, fill = true))
-                Image(
-                    painter = painterResource(id = R.drawable.sun),
-                    contentDescription = "Clear sun",
+                AsyncImage(model = "https://openweathermap.org/img/wn/${weatherData.value?.weatherData?.get(0)?.iconName}@2x.png",
+                    contentDescription = "${weatherData.value?.weatherData?.get(0)?.description}@2x.png",
                     modifier = Modifier
                         .size(size = 100.dp)
                 )
@@ -147,20 +138,37 @@ fun ShowWeather(navController : NavController) {
                 val textStyle = TextStyle(
                     fontSize = 18.sp
                 )
-                Text(text = stringResource(id = R.string.low), style = textStyle)
-                Text(text = stringResource(id = R.string.high), style = textStyle)
-                Text(text = stringResource(id = R.string.humidity), style = textStyle)
-                Text(text = stringResource(id = R.string.pressure), style = textStyle)
+                Text(
+                    text = "Low ${weatherData.value?.conditions?.tempMin?.toInt()}°",
+                    style = textStyle
+                )
+                Text(
+                    text = "High ${weatherData.value?.conditions?.tempMax?.toInt()}°",
+                    style = textStyle
+                )
+                Text(
+                    text = "Humidity ${weatherData.value?.conditions?.humidity}%",
+                    style = textStyle
+                )
+                Text(
+                    text = "Pressure ${weatherData.value?.conditions?.pressure} hPa",
+                    style = textStyle
+                )
             }
             Spacer(modifier = Modifier.height(65.dp))
-            Button(onClick = {navController.navigate("ForecastScreen")},
+            Button(
+                onClick = { navController.navigate("ForecastScreen") },
                 shape = RectangleShape,
-                colors = ButtonDefaults.buttonColors(Color.Blue))
+                colors = ButtonDefaults.buttonColors(Color.Blue)
+            )
             {
-                Text(text = "Forecast",
+                Text(
+                    text = "Forecast",
                     fontSize = 18.sp,
-                    color = Color.White)
+                    color = Color.White
+                )
             }
+
         }
     }
 }
