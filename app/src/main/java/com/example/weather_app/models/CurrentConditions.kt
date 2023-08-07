@@ -24,6 +24,8 @@ data class CurrentConditionsData(
 
 data class ForecastConditions(
     @Json(name = "list") val listOfForecasts: List<ForecastItem>,
+    @Json(name = "icon") val iconName: String,
+    @Json(name = "description") val description: String,
 )
 
 data class ForecastItem(

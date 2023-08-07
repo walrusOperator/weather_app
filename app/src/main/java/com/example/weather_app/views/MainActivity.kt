@@ -24,20 +24,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weather_app.ui.theme.Weather_appTheme
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.AsyncImage
-import com.example.weather_app.R
 import com.example.weather_app.viewModels.CurrentConditionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -53,8 +62,11 @@ class MainActivity : ComponentActivity() {
                     composable(route = "Start") {
                         MyCurrentWeather(navController)
                     }
-                    composable("ForecastScreen") {
-                        forecastItemList()
+                    composable("ForecastScreen/{zip}",
+                    arguments = listOf(navArgument("zip") {type = NavType.StringType })
+                    ) {navBackStackEntry ->
+                        val zipCode = navBackStackEntry.arguments?.getString("zip").toString()
+                        forecastItemList(zip = zipCode)
                     }
                 }
             }
@@ -75,17 +87,24 @@ fun MyCurrentWeather(navController : NavController) {
 fun TopBar() {
     TopAppBar(
         title = {
-            Text(text = "My Weather App", color = Color.White)},
+            Text(text = "My Weather App",
+                color = Color.White,
+                textAlign = TextAlign.Center
+            )
+        },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue)
     )
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewModel = hiltViewModel()) {
     val weatherData = viewModel.currentConditions.observeAsState()
+    val userInput = viewModel.userText.observeAsState()
     LaunchedEffect(Unit) {
         viewModel.viewAppeared()
     }
+
     Spacer(modifier = Modifier.height(60.dp))
     Column() {
 
@@ -155,10 +174,13 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                     style = textStyle
                 )
             }
-            Spacer(modifier = Modifier.height(65.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             Button(
-                onClick = { navController.navigate("ForecastScreen") },
+                onClick = {
+                    val navigationString = "ForecastScreen/" + viewModel.userText.value.toString()
+                    navController.navigate(route = navigationString) },
                 shape = RectangleShape,
+                modifier = Modifier.height(60.dp),
                 colors = ButtonDefaults.buttonColors(Color.Blue)
             )
             {
@@ -168,8 +190,65 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                     color = Color.White
                 )
             }
-
+        }
+        Column(
+            modifier = Modifier
+                .padding(30.dp)
+                .fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            ) {
+                TextField(
+                    value = userInput.value.toString(),
+                    modifier = Modifier
+                        .width(180.dp)
+                        .fillMaxHeight(),
+                    textStyle = TextStyle(fontSize = 20.sp),
+                    label = {
+                        Text(text = "Zip Code")
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true,
+                    onValueChange = { viewModel.userText.value = it },
+                )
+                val invalidZip = remember {mutableStateOf(false)}
+                Button(onClick = {
+                    if( viewModel.checkValidZipCode() == viewModel.invalidZipCode.value) {
+                        invalidZip.value = true
+                    } else {
+                        viewModel.invalidZipCode.value = !viewModel.checkValidZipCode()
+                    }
+                 },
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(Color.Blue),
+                    modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = "Find Zip",
+                        fontSize = 18.sp,
+                    )
+                }
+                if (invalidZip.value) {
+                    AlertDialog(
+                        onDismissRequest = { invalidZip.value = false},
+                        confirmButton = {
+                            Button(onClick = { invalidZip.value = false}) {
+                                Text(text = "Confirm")
+                            }
+                        },
+                        title = {Text(text = "Invalid Entry")},
+                        text = {Text(text = "Zip code must be a 5 digit real entry")}
+                    )
+                }
+            }
         }
     }
 }
+
+
+
+
+
 
