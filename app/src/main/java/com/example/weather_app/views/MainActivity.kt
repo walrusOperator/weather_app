@@ -42,9 +42,11 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.AsyncImage
 import com.example.weather_app.viewModels.CurrentConditionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,8 +63,12 @@ class MainActivity : ComponentActivity() {
                     composable(route = "Start") {
                         MyCurrentWeather(navController)
                     }
-                    composable("ForecastScreen") {
-                        forecastItemList()
+                    composable("ForecastScreen/{zip}",
+                    arguments = listOf(navArgument("zip") {type = NavType.StringType })
+                    ) {navBackStackEntry ->
+                        val zipCode = navBackStackEntry.arguments?.getString("zip").toString()
+                        actionBar?.title = "Forecast"
+                        forecastItemList(zip = zipCode)
                     }
                 }
             }
@@ -168,7 +174,9 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
             }
             Spacer(modifier = Modifier.height(65.dp))
             Button(
-                onClick = { navController.navigate("ForecastScreen") },
+                onClick = {
+                    val navigationString = "ForecastScreen/" + viewModel.userText.value.toString()
+                    navController.navigate(route = navigationString) },
                 shape = RectangleShape,
                 colors = ButtonDefaults.buttonColors(Color.Blue)
             )

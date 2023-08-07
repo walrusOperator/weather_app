@@ -36,10 +36,10 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun forecastItemList(viewModel: ForecastViewModel = hiltViewModel()) {
+fun forecastItemList(viewModel: ForecastViewModel = hiltViewModel(), zip: String) {
     val forecastWeather = viewModel.forecast.observeAsState()
     LaunchedEffect(Unit) {
-        viewModel.viewAppeared()
+        viewModel.viewAppeared(zip)
     }
     TopAppBar(
         title = {
@@ -49,9 +49,6 @@ fun forecastItemList(viewModel: ForecastViewModel = hiltViewModel()) {
     Column {
         Spacer(modifier = Modifier.padding(top = 60.dp))
         LazyColumn {
-//            for (data in forecastWeather) {
-//                item { forecastItemView(data, navController = navController) }
-//            }
             items(items = forecastWeather.value?.forecastList?: listOf()) {
                 forecastItemView(dataItem = it)
             }
