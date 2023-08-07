@@ -24,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weather_app.ui.theme.Weather_appTheme
-//import androidx.compose.foundation.gestures.ModifierLocalScrollableContainerProvider.value
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
@@ -34,12 +33,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavType
@@ -67,7 +66,6 @@ class MainActivity : ComponentActivity() {
                     arguments = listOf(navArgument("zip") {type = NavType.StringType })
                     ) {navBackStackEntry ->
                         val zipCode = navBackStackEntry.arguments?.getString("zip").toString()
-                        actionBar?.title = "Forecast"
                         forecastItemList(zip = zipCode)
                     }
                 }
@@ -89,7 +87,11 @@ fun MyCurrentWeather(navController : NavController) {
 fun TopBar() {
     TopAppBar(
         title = {
-            Text(text = "My Weather App", color = Color.White)},
+            Text(text = "My Weather App",
+                color = Color.White,
+                textAlign = TextAlign.Center
+            )
+        },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue)
     )
 }
@@ -172,12 +174,13 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                     style = textStyle
                 )
             }
-            Spacer(modifier = Modifier.height(65.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             Button(
                 onClick = {
                     val navigationString = "ForecastScreen/" + viewModel.userText.value.toString()
                     navController.navigate(route = navigationString) },
                 shape = RectangleShape,
+                modifier = Modifier.height(60.dp),
                 colors = ButtonDefaults.buttonColors(Color.Blue)
             )
             {
@@ -187,11 +190,10 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                     color = Color.White
                 )
             }
-
         }
         Column(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(30.dp)
                 .fillMaxSize()
         ) {
             Row(
@@ -221,10 +223,11 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                     }
                  },
                     shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(Color.Blue),
                     modifier = Modifier.fillMaxSize()) {
                     Text(
                         text = "Find Zip",
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
                     )
                 }
                 if (invalidZip.value) {
@@ -239,7 +242,6 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                         text = {Text(text = "Zip code must be a 5 digit real entry")}
                     )
                 }
-
             }
         }
     }
