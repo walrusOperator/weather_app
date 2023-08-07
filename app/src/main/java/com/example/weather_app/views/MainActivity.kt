@@ -226,8 +226,9 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
                             Button(onClick = { invalidZip.value = false}) {
                                 Text(text = "Confirm")
                             }
-
-                        }
+                        },
+                        title = {Text(text = "Invalid Entry")},
+                        text = {Text(text = "Zip code must be a 5 digit real entry")}
                     )
                 }
 
