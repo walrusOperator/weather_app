@@ -20,6 +20,7 @@ data class DayForecast(
         get() = tempData.min
     val maxTemp : Float
         get() = tempData.max
+
 }
 
 data class ForecastTemp(
