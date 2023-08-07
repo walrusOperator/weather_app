@@ -16,8 +16,23 @@ class CurrentConditionsViewModel @Inject constructor(private val apiService: Api
     private val _currentConditions: MutableLiveData<CurrentConditions> = MutableLiveData()
     val currentConditions: LiveData<CurrentConditions>
         get() = _currentConditions
-    fun viewAppeared() = viewModelScope.launch {
-        _currentConditions.value = apiService.getCurrentConditions()
+    val userText: MutableLiveData<String> = MutableLiveData("55426")
+    val invalidZipCode: MutableLiveData<Boolean> = MutableLiveData(false)
+    fun viewAppeared(zipCode: String?= userText.value) = viewModelScope.launch {
+        _currentConditions.value = apiService.getCurrentConditions(zipCode.toString())
     }
 
+    fun checkValidZipCode(): Boolean {
+        val currentInput = userText.value
+        return if (
+            (currentInput.isNullOrEmpty() || currentInput.length != 5) || (currentInput.any { !it.isDigit() }))
+            false
+        else {
+            viewAppeared()
+            true
+        }
+    }
 }
+
+
+

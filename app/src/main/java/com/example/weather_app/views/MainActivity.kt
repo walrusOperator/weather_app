@@ -24,20 +24,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weather_app.ui.theme.Weather_appTheme
-import androidx.compose.foundation.Image
+//import androidx.compose.foundation.gestures.ModifierLocalScrollableContainerProvider.value
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import com.example.weather_app.R
 import com.example.weather_app.viewModels.CurrentConditionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -79,13 +87,16 @@ fun TopBar() {
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue)
     )
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewModel = hiltViewModel()) {
     val weatherData = viewModel.currentConditions.observeAsState()
+    val userInput = viewModel.userText.observeAsState()
     LaunchedEffect(Unit) {
         viewModel.viewAppeared()
     }
+
     Spacer(modifier = Modifier.height(60.dp))
     Column() {
 
@@ -170,6 +181,63 @@ fun ShowWeather(navController : NavController, viewModel: CurrentConditionsViewM
             }
 
         }
+        Column(
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            ) {
+                TextField(
+                    value = userInput.value.toString(),
+                    modifier = Modifier
+                        .width(180.dp)
+                        .fillMaxHeight(),
+                    textStyle = TextStyle(fontSize = 20.sp),
+                    label = {
+                        Text(text = "Zip Code")
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true,
+                    onValueChange = { viewModel.userText.value = it },
+                )
+                val invalidZip = remember {mutableStateOf(false)}
+                Button(onClick = {
+                    if( viewModel.checkValidZipCode() == viewModel.invalidZipCode.value) {
+                        invalidZip.value = true
+                    } else {
+                        viewModel.invalidZipCode.value = !viewModel.checkValidZipCode()
+                    }
+                 },
+                    shape = RectangleShape,
+                    modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = "Find Zip",
+                        fontSize = 18.sp
+                    )
+                }
+                if (invalidZip.value) {
+                    AlertDialog(
+                        onDismissRequest = { invalidZip.value = false},
+                        confirmButton = {
+                            Button(onClick = { invalidZip.value = false}) {
+                                Text(text = "Confirm")
+                            }
+
+                        }
+                    )
+                }
+
+            }
+        }
     }
 }
+
+
+
+
+
 
